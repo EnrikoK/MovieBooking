@@ -2,7 +2,6 @@ package cgi.demo.services;
 
 import cgi.demo.entities.User;
 import cgi.demo.repositories.UserRepository;
-import cgi.demo.utils.CustomUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

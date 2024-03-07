@@ -5,7 +5,6 @@ import cgi.demo.DTO.RegisterDTO;
 import cgi.demo.entities.Role;
 import cgi.demo.entities.User;
 import cgi.demo.repositories.UserRepository;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -23,7 +21,7 @@ import org.springframework.http.HttpHeaders;
 import java.util.Map;
 
 @Service
-public class UserService {
+public class AuthService {
 
     @Autowired
     AuthenticationManager authenticationManager;
@@ -60,12 +58,10 @@ public class UserService {
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
 
-            //SecurityContextHolder.getContext().setAuthentication(authentication);
-            Object prin = authentication.getPrincipal();
-            UserDetails a = (UserDetails) prin;
-            System.out.println(a);
+            Object principal = authentication.getPrincipal();
+            UserDetails user = (UserDetails) principal;
 
-            String token = jwtService.generateToken(dto.getUsername());
+            String token = jwtService.generateToken(user.getUsername());
 
             ResponseCookie cookie = ResponseCookie.from("jwt", token)
                     .httpOnly(true)  // Set HTTP-only attribute
@@ -75,13 +71,14 @@ public class UserService {
             HttpHeaders jwtCookieHeader = new HttpHeaders();
             jwtCookieHeader.add(HttpHeaders.SET_COOKIE,cookie.toString());
 
-
             // Return a success response
-            return ResponseEntity.ok().headers(jwtCookieHeader).body("ok");
+            return ResponseEntity.ok().headers(jwtCookieHeader).body(Map.of("message","success"));
         }catch (Exception e){
 
             return ResponseEntity.status(400).body(Map.of("message",e.toString()));
         }
 
     }
+
+
 }

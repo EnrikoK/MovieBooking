@@ -47,11 +47,11 @@ public class JwtService {
     }
 
 
-    public boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token) {
         JWTVerifier verifier = JWT.require(algorithm).build();
         try{
-            DecodedJWT jwt = verifier.verify(token);
-            return jwt.getSubject().equals(userDetails.getUsername());
+           verifier.verify(token);
+           return true;
         }catch (Exception e){
             return false;
         }

@@ -26,6 +26,9 @@ public class User implements UserDetails {
 
     private Role role;
 
+    @OneToMany
+    private List<Ticket> tickets;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("USER"));
