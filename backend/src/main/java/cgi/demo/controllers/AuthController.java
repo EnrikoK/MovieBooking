@@ -4,6 +4,7 @@ import cgi.demo.DTO.LoginDTO;
 import cgi.demo.services.JwtService;
 import cgi.demo.services.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,8 +38,18 @@ public class AuthController {
 
     @GetMapping("/authenticate")
     public ResponseEntity<?> authenticateUser(@CookieValue(name = "jwt",defaultValue = "")String token){
-        boolean isAuth = jwtService.validateToken(token);
-        return ResponseEntity.ok(Map.of("authentication",isAuth));
+        String user = jwtService.extractUsername(token);
+        if(user != null){
+            return ResponseEntity.ok(Map.of("authentication",true,"username",user));
+        }
+
+        return ResponseEntity.status(401).body(Map.of("authentication",false));
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<?> logoutUser(@CookieValue(name = "jwt",defaultValue = "") String token, HttpServletResponse response){
+        //TODO
+        return ResponseEntity.ok("Not implemented yet...");
     }
 
     @GetMapping("/test")

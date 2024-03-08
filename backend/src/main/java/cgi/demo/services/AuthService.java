@@ -64,18 +64,18 @@ public class AuthService {
             String token = jwtService.generateToken(user.getUsername());
 
             ResponseCookie cookie = ResponseCookie.from("jwt", token)
-                    .httpOnly(true)  // Set HTTP-only attribute
-                    .path("/") // Set cookie path
+                    .httpOnly(true)
+                    .path("/")
                     .build();
 
             HttpHeaders jwtCookieHeader = new HttpHeaders();
             jwtCookieHeader.add(HttpHeaders.SET_COOKIE,cookie.toString());
 
             // Return a success response
-            return ResponseEntity.ok().headers(jwtCookieHeader).body(Map.of("message","success"));
+            return ResponseEntity.ok().headers(jwtCookieHeader).body(Map.of("authentication",true,"username",authentication.getName()));
         }catch (Exception e){
 
-            return ResponseEntity.status(400).body(Map.of("message",e.toString()));
+            return ResponseEntity.status(401).body(Map.of("message","Wrong username or password"));
         }
 
     }

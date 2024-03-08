@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/movie")
-public class MovieController {
+@RequestMapping("/api/screenings")
+public class ScreeningsController {
 
     @Autowired
     private ScreeningService screeningService;
