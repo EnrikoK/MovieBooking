@@ -1,10 +1,10 @@
 <template>
-<div class="component-container">
+<div :class="this.$store.state.isLoggedIn ? 'component-container':'component-container unclickable'">
     <div class="selector-container">
         <div >
             <h3 class="screen">Ekraan</h3>
             <div v-for="(row, indexRow) in this.seatsMatrix" :key="indexRow" class="seat-row">
-                <p class="row-annotation">Rida:{{ indexRow }}</p>
+                <p class="row-annotation">Rida:{{ indexRow +1}}</p>
                 <div v-for="(seat, indexCol) in row" :key="indexCol">
                     <div v-if="seat==0" class="seat free" @click="selectSeat(indexRow,indexCol)" >{{ (indexCol+1)  }}</div>
                     <div v-else-if="seat==1" class="seat taken">{{ (indexCol+1)  }}</div>
@@ -24,33 +24,44 @@
             <p>Logi sisse või loo kasutaja, et osta pileteid</p>
         </div>
     </div>
+    <div class="card-details">
+        <label>email:</label>
+        <input :value="this.email">
+        <label>Kaarti number:</label>
+        <input :value="this.card">
+        <label>CVC:</label>
+        <input :value="this.cvc">
+        
+    </div> 
+    <button id="purchase-button" @click="this.buyTickets()">Osta</button> 
     <p v-if="this.tooltip" class="tooltip">Kõrvuti kohti ei leitud. Vali ise sobivad kohad!</p>
 </div>
 </template>
 
 <script>
-import { ref } from 'vue'
-import { mapGetters } from 'vuex'
+import axios from 'axios'
 export default{
+
     data: function(){
         return{
-            seatsMatrix:ref([[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]]),
-            activeSeats:ref([]),
+            seatsMatrix:[[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]],
+            activeSeats:[],
             tooltip:false,
             tooltipMessage:"Kõrvuti kohti ei leidunud, vali ise sobivad kohad!",
             screeningInfo:null,
+            card:null,
+            cvc:null,
+            email:null
         }
     },
-    computed:{
-        ...mapGetters([
-            'isLoggedIn'
-        ])
+    props:{
+        takenSeats: Array
     },
     methods:{
         selectSeat(row,col){
 
             let seat = this.seatsMatrix[row][col];
-            if(seat == 2){
+            if(seat == 2 ){
                 this.seatsMatrix[row][col]=0
                 this.activeSeats = this.activeSeats.filter(x =>!(x[0] == row && x[1] == col))
 
@@ -103,19 +114,25 @@ export default{
             }
         },
         generateRandomTakenSeats(){
-            let x = Math.random()*15;
-            while (x > 0) {
-                let row = Math.floor(Math.random() * this.seatsMatrix.length);
-                let col = Math.floor(Math.random() * this.seatsMatrix[row].length);
+            return new Promise((resolve)=>{
+                let x = Math.random()*15;
+                while (x > 0) {
+                    let row = Math.floor(Math.random() * this.seatsMatrix.length);
+                    let col = Math.floor(Math.random() * this.seatsMatrix[row].length);
 
-                if (this.seatsMatrix[row][col] == 0) {
-                this.seatsMatrix[row][col] = 1;
-                x--;
+                    if (this.seatsMatrix[row][col] == 0) {
+                    this.seatsMatrix[row][col] = 1;
+                    x--;
+                    }
                 }
-            }
+                resolve();                
+            })
+
         },
         handleIncrement(){
-
+            if(this.activeSeats.length >= 30){
+                return;
+            }
             let seats = this.activeSeats.length;
             for (let seat of this.activeSeats){
                 this.selectSeat(seat[0],seat[1]);
@@ -124,7 +141,9 @@ export default{
             this.recomendSeats(seats+1);
         },
         handleDecrement(){
-
+            if(this.activeSeats.length <= 1){
+                return;
+            }
             let seats = this.activeSeats.length;
             for (let seat of this.activeSeats){
                this.selectSeat(seat[0],seat[1]);
@@ -132,21 +151,81 @@ export default{
             }
             this.activeSeats=[];
             this.recomendSeats(seats-1); 
+        },
+        fillRealTakenSeats(takenSeats){
+            return new Promise((resolve) =>{
+                for(let seat of takenSeats){
+                    if(seat.row > 5 || seat.seat >6){
+                        continue;
+                    }
+                    if(this.seatsMatrix[seat.row-1][seat.seat-1]==0 || this.seatsMatrix[seat.row-1][seat.seat-1]==2){
+                        this.seatsMatrix[seat.row-1][seat.seat-1]=1;
+                    }
+                }
+                resolve();
+            })
+
+        },
+        buyTickets(){
+            let seatsPayload = [];
+            for(let elem of this.activeSeats){
+                seatsPayload.push([elem[0]+1,elem[1]+1])
+            }
+            let payload = {
+                screeningID:this.$route.params.id,
+                seats:seatsPayload
+            }
+            axios.post("http://localhost:8080/api/screenings/purchase-ticket",payload,{withXSRFToken: true, withCredentials:true})
+            .then((res) =>{
+                this.$router.push({name:'purchase-success', props:{tickets:res.data}})
+            }).catch((err)=>{
+                console.log(err);
+            })
         } 
     },
-    mounted() {
+    async beforeMount() {
 
         this.$store.dispatch('authenticate');
+        this.fillRealTakenSeats(this.takenSeats)
         this.generateRandomTakenSeats();
-        this.recomendSeats();
+
+       
         
     },
+    watch:{
+        takenSeats(){
+            this.fillRealTakenSeats(this.takenSeats).then(this.recomendSeats())
+        }
+    }
 
     
 }
 </script>
 
-<style>
+<style scoped>
+.card-details{
+    font-size: large;
+    margin-top: 1em;
+}
+.card-details > label{
+    margin-right: 0.25em;
+    margin-left: 0.25em;
+
+}
+.card-details > input{
+    height: 1.5em;
+}
+#purchase-button{
+    padding: 1em;
+    font-size: large;
+    margin: 1em;
+    align-self: center;
+    background-color: rgb(255, 126, 34);
+    cursor: pointer;
+}
+#purchase-button:active{
+   background-color: rgb(255, 142, 62);
+}
 .tooltip{
     margin:1em auto;
     background-color: rgb(255, 232, 115);
@@ -189,13 +268,12 @@ export default{
     min-width: 400px;
 }
 .selector-container{
-    max-width: 50vw;
-    max-height: 100%;
+
     display: flex;
     justify-content: space-around;
     align-items: center;
-    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
-    padding: 2em;
+    box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.1);
+    padding: 3em;
 }
 
 .selected{

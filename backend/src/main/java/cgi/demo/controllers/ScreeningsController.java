@@ -48,6 +48,12 @@ public class ScreeningsController {
         }
     }
 
+    @PostMapping("/apply-filter")
+    ResponseEntity<?> filterUpcomingMovies(){
+        //TODO
+        return ResponseEntity.ok().build();
+    }
+
     @PostMapping("/purchase-ticket")
     public ResponseEntity<?> purchaseTicket(@RequestBody PurchaseDTO dto){
         PurchaseConfirmationDTO transaction = screeningService.buyTicket(dto);

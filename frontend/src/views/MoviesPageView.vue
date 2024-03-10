@@ -1,6 +1,9 @@
 <template>
 <h1>Filmid</h1>
-<screening-list></screening-list>
+<div class="content-area">
+<screening-list ></screening-list>  
+</div>
+
 </template>
 
 <script>
@@ -14,4 +17,8 @@ export default {
 </script>
 
 <style>
+.content-area{
+  margin-left: 5em;
+  margin-right: 5em;
+}
 </style>

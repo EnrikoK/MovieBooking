@@ -1,4 +1,7 @@
 <template>
+<div>
+    
+</div>
 <div v-for="elem in this.upcomingScreenings" :key="elem.id" class="screening-item"> 
     <router-link :to="{name:'screening',params:{id:elem.id}}" @click.prevent="" >
         <div>
@@ -28,10 +31,9 @@ export default{
     mounted(){
         axios.get("http://localhost:8080/api/screenings/upcoming")
         .then((res) => {
-            console.log(res)
             this.upcomingScreenings=res.data.upcoming
         }).catch((err) =>{
-            console.log(err)
+            console.log(err);
         })
     }
 }
