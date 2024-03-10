@@ -20,6 +20,7 @@ public class Movie {
 
     private String title;
 
+    private String description;
 
     @ManyToMany
     @JoinTable(name = "movie_genre",

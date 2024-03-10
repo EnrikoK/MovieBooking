@@ -43,7 +43,7 @@ public class AuthController {
             return ResponseEntity.ok(Map.of("authentication",true,"username",user));
         }
 
-        return ResponseEntity.status(401).body(Map.of("authentication",false));
+        return ResponseEntity.status(200).body(Map.of("authentication",false));
     }
 
     @GetMapping("/logout")

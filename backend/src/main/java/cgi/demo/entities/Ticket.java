@@ -21,7 +21,11 @@ public class Ticket {
     private Screening screening;
 
     private Date purchaseDate;
-
+    @Column(nullable = false)
     private int seat;
+    @Column(nullable = false)
+    private int row;
 
+    @ManyToOne
+    private User user;
 }
