@@ -1,4 +1,5 @@
 <template>
+
 <h1>Filmid</h1>
 <div class="content-area">
 <screening-list ></screening-list>  
@@ -16,9 +17,13 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .content-area{
-  margin-left: 5em;
-  margin-right: 5em;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  
 }
 </style>

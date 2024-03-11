@@ -1,10 +1,13 @@
 package cgi.demo.services;
 
 import cgi.demo.DTO.*;
+import cgi.demo.entities.Movie;
 import cgi.demo.entities.Screening;
 import cgi.demo.entities.Ticket;
+import cgi.demo.entities.User;
 import cgi.demo.repositories.ScreeningRepository;
 import cgi.demo.repositories.TicketRepository;
+import cgi.demo.repositories.UserRepository;
 import cgi.demo.utils.TicketModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -24,6 +27,9 @@ public class ScreeningService {
 
     @Autowired
     TicketModelMapper mapper;
+
+    @Autowired
+    UserRepository userRepository;
 
     public List<Screening> getAllScreenings(){
         return screeningRepository.findAll();
@@ -48,9 +54,11 @@ public class ScreeningService {
 
 
 
-    public PurchaseConfirmationDTO buyTicket(PurchaseDTO dto) {
+    public PurchaseConfirmationDTO buyTicket(PurchaseDTO dto, String username) {
 
         try {
+            //fetch the user details from the database
+            User user = userRepository.findByUsername(username);
             //Validate, if the selected seats are free
             for (int[] seat : dto.getSeats()) {
                 Optional<Ticket> ticket = ticketRepository.findTicketByScreeningAndSeats(
@@ -73,6 +81,7 @@ public class ScreeningService {
                 purchased.setPurchaseDate(purchaseDate);
                 purchased.setRow(seat[0]);
                 purchased.setSeat(seat[1]);
+                purchased.setUser(user);
                 ticketRepository.save(purchased);
                 soldTickets.add(mapper.mapToSeats(purchased));
             }
