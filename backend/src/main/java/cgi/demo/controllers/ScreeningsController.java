@@ -11,6 +11,7 @@ import cgi.demo.repositories.TicketRepository;
 import cgi.demo.repositories.UserRepository;
 import cgi.demo.services.RecomendationsService;
 import cgi.demo.services.ScreeningService;
+import cgi.demo.services.TicketsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,8 +34,9 @@ public class ScreeningsController {
     @Autowired
     private RecomendationsService recomendationsService;
 
+
     @Autowired
-    private UserRepository userRepository;
+    private TicketsService ticketsService;
 
     @GetMapping("/all-screenings")
     public ResponseEntity<?> getAllMovies(){
@@ -69,18 +71,6 @@ public class ScreeningsController {
         }
     }
 
-    @PostMapping("/purchase-ticket")
-    public ResponseEntity<?> purchaseTicket(@RequestBody PurchaseDTO dto){
 
-        PurchaseConfirmationDTO transaction = screeningService.buyTicket(
-                dto,
-                SecurityContextHolder.getContext().getAuthentication().getName()
-        );
-        if(transaction == null){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("message","These seats are already taken"));
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(transaction);
-
-    }
 
 }

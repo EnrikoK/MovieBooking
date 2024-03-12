@@ -28,9 +28,9 @@ public interface ScreeningRepository extends JpaRepository<Screening,Long> {
 
 
     @Query(value = "SELECT s.* FROM screening s " +
-            "JOIN movie m ON s.movie_id = m.id " +
-            "JOIN movie_genre mg  ON mg.movie_id = m.id " +
-            "WHERE mg.genre_id = ?1 AND s.date > CURRENT_TIMESTAMP;",nativeQuery = true)
+                    "JOIN movie m ON s.movie_id = m.id " +
+                    "JOIN movie_genre mg  ON mg.movie_id = m.id " +
+                    "WHERE mg.genre_id = ?1 AND s.date > CURRENT_TIMESTAMP;",nativeQuery = true)
     List<Screening> findUpcomingScreeningByGenreId(Long id);
 
 }

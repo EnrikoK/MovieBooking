@@ -53,9 +53,9 @@ export default{
             genres:new Set(),
             languages: new Set(),
             contentRating: new Set(),
-            selectedGenre:null,
-            selectedLanguage:null,
-            selectedRating:null,
+            selectedGenre:"",
+            selectedLanguage:"",
+            selectedRating:"",
             showRecomendations:false,
             recomendedScreenings:null,
             upcomingScreenings:null,
@@ -77,13 +77,20 @@ export default{
                 language:this.selectedLanguage,
                 rating:this.selectedRating
             };
-            this.visibleScreenings = this.upcomingScreenings.filter((item) =>{
-                for(let key in filters){
-                    if(filters[key] != null && filters[key] != ''){
-                       if( (item.movie.genres[0][key] != filters[key]) ) return false;
-                    }
+            this.showRecomendations = false;
+            this.visibleScreenings = this.upcomingScreenings.filter((item) =>{  
+                console.log(item.movie.genres[0].genre)
+                if(
+                    ( filters.genre == "" ||item.movie.genres[0].genre == filters.genre) &&
+                    (filters.language == "" || item.movie.language == filters.language ) &&
+                    (filters.rating == "" || item.movie.rating == filters.rating)
+                ){
+                    return true;
                 }
-                return true;
+                else{
+                    return false;
+                }
+                
             })
         },
         toggleUserRecomendations(){

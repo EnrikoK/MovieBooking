@@ -54,46 +54,7 @@ public class ScreeningService {
 
 
 
-    public PurchaseConfirmationDTO buyTicket(PurchaseDTO dto, String username) {
 
-        try {
-            //fetch the user details from the database
-            User user = userRepository.findByUsername(username);
-            //Validate, if the selected seats are free
-            for (int[] seat : dto.getSeats()) {
-                Optional<Ticket> ticket = ticketRepository.findTicketByScreeningAndSeats(
-                        dto.getScreeningID(),
-                        seat[0],
-                        seat[1]);
-                if (ticket.isPresent()) {
-                    return null;
-                }
-            }
-            //Get the screening info
-            Optional<Screening> screening = screeningRepository.findScreeningById(dto.getScreeningID());
-            Date purchaseDate = new Date();
-            //If seats are free then purchase the tickets.
-            // seat is defined as row,col
-            List<SeatsProjectionIMPL> soldTickets = new ArrayList<>();
-            for (int[] seat : dto.getSeats()) {
-                Ticket purchased = new Ticket();
-                purchased.setScreening(screening.get());
-                purchased.setPurchaseDate(purchaseDate);
-                purchased.setRow(seat[0]);
-                purchased.setSeat(seat[1]);
-                purchased.setUser(user);
-                ticketRepository.save(purchased);
-                soldTickets.add(mapper.mapToSeats(purchased));
-            }
-            ticketRepository.flush();
-
-            return new PurchaseConfirmationDTO().builder()
-                    .screening(screening.get())
-                    .seats(soldTickets).build();
-        }catch (Exception e){
-            return null;
-        }
-    }
 
 
 }

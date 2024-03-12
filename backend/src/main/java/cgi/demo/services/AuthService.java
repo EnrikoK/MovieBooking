@@ -63,7 +63,7 @@ public class AuthService {
             Object principal = authentication.getPrincipal();
             UserDetails user = (UserDetails) principal;
 
-            String token = jwtService.generateToken(user.getUsername());
+            String token = jwtService.generateToken(user.getUsername(),jwtService.cookieExpiry);
 
             ResponseCookie cookie = ResponseCookie.from("jwt", token)
                     .httpOnly(true)
@@ -80,6 +80,22 @@ public class AuthService {
             return ResponseEntity.status(401).body(Map.of("message","Wrong username or password"));
         }
 
+    }
+
+    public ResponseEntity<?> logoutUser(String token){
+        try{
+            String logoutToken = jwtService.setTokenExpiryToLogout(token);
+            ResponseCookie cookie = ResponseCookie.from("jwt", logoutToken)
+                    .httpOnly(true)
+                    .path("/")
+                    .build();
+
+            HttpHeaders jwtCookieHeader = new HttpHeaders();
+            jwtCookieHeader.add(HttpHeaders.SET_COOKIE,cookie.toString());
+            return ResponseEntity.status(200).headers(jwtCookieHeader).build();
+        } catch (Exception e){
+            return ResponseEntity.status(400).body(Map.of("message","Something went wrong when logging out"));
+        }
     }
 
 

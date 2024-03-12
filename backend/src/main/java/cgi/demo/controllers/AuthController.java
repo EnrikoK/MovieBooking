@@ -17,8 +17,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    @Autowired
-    private AuthenticationManager authenticationManager;
+
     @Autowired
     AuthService authService;
 
@@ -48,8 +47,7 @@ public class AuthController {
 
     @GetMapping("/logout")
     public ResponseEntity<?> logoutUser(@CookieValue(name = "jwt",defaultValue = "") String token, HttpServletResponse response){
-        //TODO
-        return ResponseEntity.ok("Not implemented yet...");
+        return authService.logoutUser(token);
     }
 
     @GetMapping("/test")

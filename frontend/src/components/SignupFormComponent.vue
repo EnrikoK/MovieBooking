@@ -17,6 +17,7 @@
 </template>
     
 <script>
+import axios from 'axios';
 export default{
     name:"SignupComponent",
     data(){
@@ -30,7 +31,21 @@ export default{
     },
     methods:{
         async createAccount(){
-
+            var payload = {
+                username:this.username,
+                password:this.password
+            }
+            axios.post("http://localhost:8080/api/auth/register",payload).then((res) =>{
+                if(res.status == 200){
+                    this.$router.push("/login");
+                }else{
+                    this.error=true;
+                    this.errorMessage="Miskit läks valesti konto loomisel";
+                }
+            }).catch(() =>{
+                this.error=true;
+                this.errorMessage="Miskit läks valesti konto loomisel";
+            })
                 
         },
         validateInputs(){

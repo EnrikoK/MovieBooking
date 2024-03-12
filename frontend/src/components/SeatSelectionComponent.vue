@@ -175,7 +175,7 @@ export default{
                 screeningID:this.$route.params.id,
                 seats:seatsPayload
             }
-            axios.post("http://localhost:8080/api/screenings/purchase-ticket",payload,{withXSRFToken: true, withCredentials:true})
+            axios.post("http://localhost:8080/api/tickets/purchase-ticket",payload,{withXSRFToken: true, withCredentials:true})
             .then((res) =>{
                 this.$router.push({name:'purchase-success', props:{tickets:res.data}})
             }).catch((err)=>{

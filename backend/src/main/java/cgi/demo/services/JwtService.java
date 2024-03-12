@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 
-
+import javax.security.auth.Subject;
 import java.util.Date;
 import java.util.Map;
 
@@ -19,14 +19,16 @@ public class JwtService {
 
     public static final String SECRET = "357638792F423F4428472B4B6250655368566D597133743677397A2443264629";
 
-    private final int cookieExpiry = 3600 * 60 * 60;
+    final int cookieExpiry = 3600 * 60 * 60;
 
-    public String generateToken(String username) {
+    private final JWTVerifier verifier = JWT.require(algorithm).build();
+
+    public String generateToken(String username, long expiry) {
         try {
             String token = JWT.create()
                     .withIssuer("auth0")
                     .withSubject(username)
-                    .withExpiresAt(new Date(System.currentTimeMillis() + cookieExpiry)) // 1 hour expiry
+                    .withExpiresAt(new Date(System.currentTimeMillis() + expiry))
                     .sign(algorithm);
             return token;
         } catch (Exception e) {
@@ -37,7 +39,7 @@ public class JwtService {
     }
 
     public String extractUsername(String token) {
-        JWTVerifier verifier = JWT.require(algorithm).build();
+
         try {
             DecodedJWT jwt = verifier.verify(token);
             return jwt.getSubject();
@@ -48,12 +50,18 @@ public class JwtService {
 
 
     public boolean validateToken(String token) {
-        JWTVerifier verifier = JWT.require(algorithm).build();
+
         try{
            verifier.verify(token);
            return true;
         }catch (Exception e){
             return false;
         }
+    }
+
+    public String setTokenExpiryToLogout(String token){
+        String subject = verifier.verify(token).getSubject();
+        return generateToken(subject,0);
+
     }
 }

@@ -1,9 +1,9 @@
 <template>
-    <nav v-if="this.$store.state.isLoggedIn">
+    <nav v-if="login">
         <ul>
             <li><RouterLink class="nav-link" to="/movies">Filmid</RouterLink></li>
             <li><RouterLink class="nav-link" to="/profile">Profiil</RouterLink></li> 
-            <li><RouterLink class="nav-link" to="/">Logi välja</RouterLink></li>              
+            <li @click="logout()">Logi välja</li>              
              
         </ul>
     </nav>
@@ -19,7 +19,26 @@
 </template>
 
 <script>
+import axios from 'axios'
+import { mapState } from 'vuex';
 export default{
+    computed:{
+        ...mapState({
+            login:'isLoggedIn'
+        })
+    },
+    methods:{
+        logout(){
+            axios.get("http://localhost:8080/api/auth/logout",{withCredentials:true}).then(()=>{
+               
+                this.$router.go(0);
+                
+                
+            }).catch((err) =>{
+                console.log(err);
+            })
+        }
+    }
 
 }
 
