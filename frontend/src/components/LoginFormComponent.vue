@@ -32,6 +32,7 @@ export default{
                 this.$router.push("/movies");
             }).catch((err) => {
                 this.invalidLogin = err.invalidLogin;
+                this.errorMessage = "Vale kasutajanimi või salasõna"
             })
         }
     }

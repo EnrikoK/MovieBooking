@@ -31,8 +31,12 @@ export default{
         logout(){
             axios.get("http://localhost:8080/api/auth/logout",{withCredentials:true}).then(()=>{
                
-                this.$router.go(0);
-                
+                this.$store.dispatch('logout');
+                // Redirect to login page
+                this.$router.push('/login');
+                // Optionally, force page reload
+                window.location.reload();
+
                 
             }).catch((err) =>{
                 console.log(err);

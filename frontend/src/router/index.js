@@ -19,6 +19,7 @@ const authenticationGuard = async(req,res,next) =>{
 }
 
 const routes = [
+    {path:'/', redirect:'/movies'},
     {path:'/movies', name:'movies', component:MoviesPageView},
     {path:'/profile',name:'profile', component:ProfileView, beforeEnter:authenticationGuard},
     {path:'/screening/:id',name:'screening',component:SingleMovieView},

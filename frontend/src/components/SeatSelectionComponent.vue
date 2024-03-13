@@ -24,15 +24,7 @@
             <p>Logi sisse või loo kasutaja, et osta pileteid</p>
         </div>
     </div>
-    <div class="card-details">
-        <label>email:</label>
-        <input :value="this.email">
-        <label>Kaarti number:</label>
-        <input :value="this.card">
-        <label>CVC:</label>
-        <input :value="this.cvc">
-        
-    </div> 
+
     <button id="purchase-button" @click="this.buyTickets()">Osta</button> 
     <p v-if="this.tooltip" class="tooltip">Kõrvuti kohti ei leitud. Vali ise sobivad kohad!</p>
 </div>
@@ -203,18 +195,7 @@ export default{
 </script>
 
 <style scoped>
-.card-details{
-    font-size: large;
-    margin-top: 1em;
-}
-.card-details > label{
-    margin-right: 0.25em;
-    margin-left: 0.25em;
 
-}
-.card-details > input{
-    height: 1.5em;
-}
 #purchase-button{
     padding: 1em;
     font-size: large;

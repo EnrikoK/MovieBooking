@@ -8,6 +8,7 @@ export default {
             this.user.authenticated = data.authentication;
         }).catch((err) => {
             console.log(err.message);
+            this.user.authenticated = false;
         });
         return this.user.authenticated;
     }

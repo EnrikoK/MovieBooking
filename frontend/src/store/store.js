@@ -42,6 +42,10 @@ const store = createStore({
                 commit('SET_LOGIN_STATUS', false);
             })
             
+        },
+        logout({commit}){
+            commit('SET_LOGIN_STATUS',false);
+            commit('SET_USER',null);
         }
 
     }

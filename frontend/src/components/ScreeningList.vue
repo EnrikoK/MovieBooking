@@ -7,17 +7,22 @@
             <option value="">All</option>
             <option v-for="genre in genres" :key="genre" :value="genre">{{ genre }}</option>
         </select>
+
         <label for="language">Keel: </label>
         <select v-model="this.selectedLanguage" @change="applyFilters">
             <option value="">All</option>
             <option v-for="language in this.languages" :key="language" :value="language">{{ language }}</option>
         </select>
+
         <label for="rating">Vanus: </label>
-        <select v-model="this.contentRating" @change="applyFilters">
+        <select v-model="this.selectedRating" @change="applyFilters">
             <option value="">All</option>
             <option v-for="rating in this.contentRating" :key="rating" :value="rating">{{ rating }}</option>
         </select>
+        <label for="time">Alates kellaajast: </label>
+        <input type="time" name="time" v-model="this.selectedTime" @change="applyFilters">
         </div>
+
         <div v-if="this.$store.state.isLoggedIn">
             <button :class="this.showRecomendations?'recomendations-button active':'recomendations-button'" @click="toggleUserRecomendations()">Vaata enda soovitus!</button>
         </div>
@@ -56,6 +61,7 @@ export default{
             selectedGenre:"",
             selectedLanguage:"",
             selectedRating:"",
+            selectedTime:null,
             showRecomendations:false,
             recomendedScreenings:null,
             upcomingScreenings:null,
@@ -75,15 +81,17 @@ export default{
             let filters={
                 genre:this.selectedGenre,
                 language:this.selectedLanguage,
-                rating:this.selectedRating
+                rating:this.selectedRating,
+                time:this.selectedTime
             };
+            
             this.showRecomendations = false;
-            this.visibleScreenings = this.upcomingScreenings.filter((item) =>{  
-                console.log(item.movie.genres[0].genre)
+            this.visibleScreenings = this.upcomingScreenings.filter((item) =>{
                 if(
                     ( filters.genre == "" ||item.movie.genres[0].genre == filters.genre) &&
                     (filters.language == "" || item.movie.language == filters.language ) &&
-                    (filters.rating == "" || item.movie.rating == filters.rating)
+                    (filters.rating == "" || item.movie.rating == filters.rating) &&
+                    (filters.time == "" || this.dateCheckerUtil(item.date,filters.time.split(":")))
                 ){
                     return true;
                 }
@@ -95,15 +103,17 @@ export default{
         },
         toggleUserRecomendations(){
             this.showRecomendations = !this.showRecomendations;
-            if(this.recomendedScreenings == null){
-                this.getUserRecomendations();
-            }
+            
             if(this.showRecomendations){
                 this.visibleScreenings=this.recomendedScreenings;
             }else{
                 this.visibleScreenings=this.upcomingScreenings;
             }
-            console.log(this.upcomingScreenings)
+        },
+        dateCheckerUtil(date,filter){
+  
+            let d = new Date(date);
+            return d.getHours() > parseInt(filter[0]) || (d.getHours() == parseInt(filter[0]) && d.getMinutes() >= parseInt(filter[1]))       
         }
     },
     mounted(){
@@ -119,6 +129,7 @@ export default{
         }).catch((err) =>{
             console.log(err);
         })
+        this.getUserRecomendations();
     }
 }
 </script>
