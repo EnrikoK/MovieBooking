@@ -9,7 +9,7 @@ CREATE TABLE genres (
 
 -- Drop table
 
--- DROP TABLE movie;
+--DROP TABLE movie;
 
 CREATE TABLE movie (
                        id bigserial NOT NULL,
@@ -26,7 +26,7 @@ CREATE TABLE movie (
 
 -- Drop table
 
--- DROP TABLE users;
+--DROP TABLE users;
 
 CREATE TABLE users (
                        "role" int2 NULL,
@@ -43,7 +43,7 @@ CREATE TABLE users (
 
 -- Drop table
 
--- DROP TABLE movie_genre;
+--DROP TABLE movie_genre;
 
 CREATE TABLE movie_genre (
                              genre_id int8 NOT NULL,
@@ -57,7 +57,7 @@ CREATE TABLE movie_genre (
 
 -- Drop table
 
--- DROP TABLE screening;
+--DROP TABLE screening;
 
 CREATE TABLE screening (
                            "date" timestamp(6) NULL,
@@ -72,7 +72,7 @@ CREATE TABLE screening (
 
 -- Drop table
 
--- DROP TABLE ticket;
+--DROP TABLE ticket;
 
 CREATE TABLE ticket (
                         "row" int4 NOT NULL,
@@ -88,47 +88,38 @@ CREATE TABLE ticket (
 
 -- Insert genres
 INSERT INTO genres (genre) VALUES
-                               ('Action'),
-                               ('Comedy'),
-                               ('Drama'),
-                               ('Horror'),
-                               ('Science Fiction');
+                               ('Komöödia'),
+                               ('Draama'),
+                               ('Märul'),
+                               ('Põnevik'),
+                               ('Animatsioon'),
+                               ('Romantika');
 
 -- Insert movies
 INSERT INTO movie (description, "language", rating, title) VALUES
-                                                               ('A thrilling action-packed movie', 'English', 'PG13', 'The Avengers'),
-                                                               ('A hilarious comedy about friends', 'English', 'PG', 'Superbad'),
-                                                               ('An emotional journey of love and loss', 'English', 'PG13', 'The Notebook'),
-                                                               ('A terrifying horror film', 'English', 'R', 'The Conjuring'),
-                                                               ('An epic sci-fi adventure', 'English', 'PG13', 'Interstellar');
+                                                               ('Väike linnuke satub suurde seiklusesse. Ühel päeval avastab väike linnuke, et tema pesa on hävitatud ja ta peab leidma uue kodu. Algab põnev seiklus üle metsade ja mägede.', 'Eesti', 'PG', 'Seiklusrikas Linnuke'),
+                                                               ('Kahe armastava hinge südantlõhestav lugu. Noored armastavad teineteist rohkem kui midagi muud maailmas, kuid saatusel on nende jaoks eriline plaan, mis paneb nende armastuse proovile.', 'Inglise', 'PG13', 'Armastuse Viimane Laul'),
+                                                               ('Tulevikumaailmas peavad inimesed võitlema masinate vastu. Aastal 2050 on maailm muutunud tundmatuseni, kus inimesed peavad võitlema ülemaailmse masinate ülevõimu vastu. Üks kangelane astub välja, et lõpetada see hullumeelsus.', 'Inglise', 'R', 'Robovõitlus'),
+                                                               ('Kangelane võitleb kurja ülemvõimu vastu. Vapralt Edasi on lugu noorest talupojast, kes peab võitlema pimeduse jõududega, et päästa oma koduküla ja armastatu.', 'Eesti', 'PG13', 'Vapralt Edasi'),
+                                                               ('Salapärane mõrv, kus kõik on kahtlusalused. Ühes väikeses külas toimub salapärane mõrv, kus kõik külaelanikud on kahtlusalused. Üks detektiiv peab lahendama selle keerulise juhtumi enne, kui on liiga hilja.', 'Inglise', 'R', 'Mõrv Mustas Öös');
 
--- Insert users
-INSERT INTO users ("role", "password", username) VALUES
-                                                     (1, 'password123', 'john_doe'),
-                                                     (0, 'securepass', 'jane_smith'),
-                                                     (1, 'abc123', 'alice_green');
+
 
 -- Insert movie_genre relations
 INSERT INTO movie_genre (genre_id, movie_id) VALUES
-                                                 (1, 1),
-                                                 (1, 5),
-                                                 (2, 2),
-                                                 (3, 3),
-                                                 (4, 4),
-                                                 (5, 5);
+                                                (1, 1),
+                                                (6, 1),
+                                                (2, 2),
+                                                (3, 3),
+                                                (4, 3),
+                                                (4, 4),
+                                                (1, 4),
+                                                (5, 5);
 
 -- Insert screenings
 INSERT INTO screening ("date", movie_id) VALUES
-                                             ('2024-03-14 18:00:00', 1),
-                                             ('2024-03-15 20:00:00', 2),
-                                             ('2024-03-16 17:30:00', 3),
-                                             ('2024-03-17 21:00:00', 4),
-                                             ('2024-03-18 19:45:00', 5);
-
--- Insert tickets
-INSERT INTO ticket ("row", seat, purchase_date, screening_id, user_id) VALUES
-                                                                           (1, 5, '2024-03-14 15:00:00', 1, 1),
-                                                                           (2, 10, '2024-03-15 12:30:00', 2, 2),
-                                                                           (3, 15, '2024-03-16 09:45:00', 3, 3),
-                                                                           (4, 20, '2024-03-17 16:20:00', 4, 1),
-                                                                           (5, 25, '2024-03-18 14:15:00', 5, 2);
+                                             ('2024-06-15 18:00:00', 1),
+                                             ('2024-06-16 20:00:00', 2),
+                                             ('2024-06-17 19:30:00', 3),
+                                             ('2024-06-18 21:00:00', 4),
+                                             ('2024-06-19 17:45:00', 5);

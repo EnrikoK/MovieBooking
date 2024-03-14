@@ -4,20 +4,16 @@ import axios from 'axios';
 const store = createStore({
     state:{
         isLoggedIn:false,
-        user:null
+
     },
     mutations:{
         SET_LOGIN_STATUS(state, status){
             state.isLoggedIn = status;
         },
-        SET_USER(state, user){
-            state.user = user;
-        }
 
     },
     getters:{
         isLoggedIn: state => state.isLoggedIn,
-        user: state => state.user
 
     },
     actions:{
@@ -25,7 +21,6 @@ const store = createStore({
             return new Promise((resolve,reject) =>{
                 axios.post("http://localhost:8080/api/auth/login",payload,{withXSRFToken: true, withCredentials:true}).then((res)=> {
                     if(res.status == 200){
-                        commit('SET_USER', "toomas");
                         commit('SET_LOGIN_STATUS', true);
                         resolve({invalidLogin:false});
                     }

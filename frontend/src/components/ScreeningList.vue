@@ -2,30 +2,35 @@
 <div id="component-container">
     <div class="filter-bar">
         <div>
-        <label for="genre">Žanr: </label>
-        <select v-model="this.selectedGenre" @change="applyFilters">
-            <option value="">All</option>
-            <option v-for="genre in genres" :key="genre" :value="genre">{{ genre }}</option>
-        </select>
+            <label for="genre">Žanr: </label>
+            <select v-model="this.selectedGenre" @change="applyFilters">
+                <option value="">All</option>
+                <option v-for="genre in genres" :key="genre" :value="genre">{{ genre }}</option>
+            </select>
 
-        <label for="language">Keel: </label>
-        <select v-model="this.selectedLanguage" @change="applyFilters">
-            <option value="">All</option>
-            <option v-for="language in this.languages" :key="language" :value="language">{{ language }}</option>
-        </select>
+            <label for="language">Keel: </label>
+            <select v-model="this.selectedLanguage" @change="applyFilters">
+                <option value="">All</option>
+                <option v-for="language in this.languages" :key="language" :value="language">{{ language }}</option>
+            </select>
 
-        <label for="rating">Vanus: </label>
-        <select v-model="this.selectedRating" @change="applyFilters">
-            <option value="">All</option>
-            <option v-for="rating in this.contentRating" :key="rating" :value="rating">{{ rating }}</option>
-        </select>
-        <label for="time">Alates kellaajast: </label>
-        <input type="time" name="time" v-model="this.selectedTime" @change="applyFilters">
+            <label for="rating">Vanus: </label>
+            <select v-model="this.selectedRating" @change="applyFilters">
+                <option value="">All</option>
+                <option v-for="rating in this.contentRating" :key="rating" :value="rating">{{ rating }}</option>
+            </select>
+            <label for="time">Alates kellaajast: </label>
+            <input type="time" name="time" v-model="this.selectedTime" @change="applyFilters">
+            <div class="button-area">
+                <button class="recomendations-button" @click="removeFilters">Eemalda filtrid</button>
+                <div v-if="this.$store.state.isLoggedIn">
+                    <button :class="this.showRecomendations?'recomendations-button active':'recomendations-button'" @click="toggleUserRecomendations()">Vaata enda soovitus!</button>
+                </div>                
+            </div>
+
         </div>
 
-        <div v-if="this.$store.state.isLoggedIn">
-            <button :class="this.showRecomendations?'recomendations-button active':'recomendations-button'" @click="toggleUserRecomendations()">Vaata enda soovitus!</button>
-        </div>
+
     </div>
 
     <div v-for="elem in this.visibleScreenings" :key="elem.id" class="screening-item"> 
@@ -36,11 +41,13 @@
                     <h3>{{ new Date(elem.date).toLocaleString('en-UK',{year: 'numeric',month: 'numeric',day: 'numeric',hour: 'numeric',minute: 'numeric'}) }}</h3>
                 </div>
             </div>
-            <div>
-                <label>Žanrid:</label>
-                <ul>
-                    <li v-for="(genre, index) in elem.movie.genres" :key="index">{{ genre.genre }}</li>
-                </ul>
+            <div class="screening-content">
+                <div>
+                    <ul>
+                        <p>Žanrid: </p>
+                        <li v-for="(genre) in elem.movie.genres" :key="genre"> {{ genre.genre }}</li>
+                    </ul>                    
+                </div>
                 <img class="movie-poster" src="../../public/generic.png">             
             </div>
         </router-link>
@@ -61,7 +68,7 @@ export default{
             selectedGenre:"",
             selectedLanguage:"",
             selectedRating:"",
-            selectedTime:null,
+            selectedTime:"00:00",
             showRecomendations:false,
             recomendedScreenings:null,
             upcomingScreenings:null,
@@ -88,7 +95,7 @@ export default{
             this.showRecomendations = false;
             this.visibleScreenings = this.upcomingScreenings.filter((item) =>{
                 if(
-                    ( filters.genre == "" ||item.movie.genres[0].genre == filters.genre) &&
+                    ( filters.genre == "" || this.genreCheckerUtil(item.movie.genres,filters.genre) ) &&
                     (filters.language == "" || item.movie.language == filters.language ) &&
                     (filters.rating == "" || item.movie.rating == filters.rating) &&
                     (filters.time == "" || this.dateCheckerUtil(item.date,filters.time.split(":")))
@@ -103,7 +110,9 @@ export default{
         },
         toggleUserRecomendations(){
             this.showRecomendations = !this.showRecomendations;
-            
+            this.selectedGenre = "";
+            this.selectedLanguage = "";
+            this.selectedRating = "";
             if(this.showRecomendations){
                 this.visibleScreenings=this.recomendedScreenings;
             }else{
@@ -114,6 +123,20 @@ export default{
   
             let d = new Date(date);
             return d.getHours() > parseInt(filter[0]) || (d.getHours() == parseInt(filter[0]) && d.getMinutes() >= parseInt(filter[1]))       
+        },
+        genreCheckerUtil(genres, filter){
+            for(let elem of genres){
+                if(elem.genre == filter) return true;
+            }
+            return false;
+        },
+        removeFilters(){
+            this.selectedGenre = "";
+            this.selectedLanguage = "";
+            this.selectedRating = "";
+            this.selectedTime = "00:00";
+            this.showRecomendations = false;
+            this.applyFilters()
         }
     },
     mounted(){
@@ -135,6 +158,20 @@ export default{
 </script>
 
 <style scoped>
+.filter-bar{
+    display: flex;
+    justify-content: space-evenly;
+    font-size: large;
+}
+.filter-bar select,option{
+    font-size: large;
+    margin: 1em;
+}
+.button-area{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 .recomendations-button{
     font-size: large;
     padding: 1em;
@@ -150,13 +187,27 @@ export default{
     display: flex;
     justify-content: space-around;
 }
+.screening-content{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.screening-content ul,li {
+    text-decoration:  none;
+    font-size: large;
+    font-weight: bold;
+
+}
 .screening-item{
     box-shadow: 0 5px 5px rgba(0, 0, 0, 0.5);
     padding: 1em;
     margin: 1em;
     min-width: 50vw;
     max-width: 60vw;
+    
 }
+
 .screening-item:hover{
     background-color: rgb(237, 237, 237);
 }
@@ -164,7 +215,5 @@ export default{
     max-width: 200px;
     margin: 0.75em;
 }
-.screening-item{
-    
-}
+
 </style>

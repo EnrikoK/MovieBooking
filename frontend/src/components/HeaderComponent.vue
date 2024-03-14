@@ -1,9 +1,9 @@
 <template>
-    <nav v-if="login">
+    <nav v-if="this.login == true">
         <ul>
             <li><RouterLink class="nav-link" to="/movies">Filmid</RouterLink></li>
             <li><RouterLink class="nav-link" to="/profile">Profiil</RouterLink></li> 
-            <li @click="logout()">Logi välja</li>              
+            <li @click="logout">Logi välja</li>              
              
         </ul>
     </nav>
@@ -24,25 +24,22 @@ import { mapState } from 'vuex';
 export default{
     computed:{
         ...mapState({
-            login:'isLoggedIn'
+            login:['isLoggedIn']
         })
     },
     methods:{
-        logout(){
-            axios.get("http://localhost:8080/api/auth/logout",{withCredentials:true}).then(()=>{
-               
+        async logout(){
+            try{
+                await axios.get("http://localhost:8080/api/auth/logout",{withCredentials:true})
                 this.$store.dispatch('logout');
-                // Redirect to login page
-                this.$router.push('/login');
-                // Optionally, force page reload
-                window.location.reload();
-
-                
-            }).catch((err) =>{
+            }catch (err){
                 console.log(err);
-            })
+            }
+            
+            
+
         }
-    }
+    },
 
 }
 
@@ -51,7 +48,8 @@ export default{
 <style>
 nav {
     padding: 2em; 
-    border-bottom: 3px solid #526D82;
+    border-bottom: 3px solid rgb(255, 126, 34);
+
 }
 
 /* Style the list items */
@@ -59,14 +57,17 @@ ul {
     list-style-type: none; 
     margin: 0; 
     padding: 0; 
+    display: flex;
+    justify-content: space-evenly;
 } 
 li {
     display: inline; /* Display list items horizontally */
-    padding: 2em;
+    padding: 1em;
+    font-size: 24px;
 
 }
 li:hover{
-   text-decoration:  #526D82 underline 3px;
+   text-decoration:  rgb(255, 126, 34) underline 3px;
 }
 li:active{
     background-color: #ccc;

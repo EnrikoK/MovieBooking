@@ -36,4 +36,5 @@ router.beforeEach((req,res,next)=>{
     store.dispatch('authenticate');
     next();
 })
+
 export default router;
