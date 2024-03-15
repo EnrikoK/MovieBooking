@@ -1,8 +1,6 @@
 package cgi.demo.repositories;
 
 import cgi.demo.DTO.SeatsProjection;
-import cgi.demo.DTO.SeatsProjectionIMPL;
-import cgi.demo.DTO.UserFavoriteGenresProjection;
 import cgi.demo.entities.Screening;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

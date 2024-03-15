@@ -33,22 +33,24 @@
 
     </div>
 
-    <div v-for="elem in this.visibleScreenings" :key="elem.id" class="screening-item"> 
-        <router-link :to="{name:'screening',params:{id:elem.id}}" @click.prevent="" >
+    <div v-for="elem in this.visibleScreenings" :key="elem.screening.id" class="screening-item"> 
+        <router-link :to="{name:'screening',params:{id:elem.screening.id}}" @click.prevent="" >
             <div>
                 <div class="screening-header">
-                    <h3>{{ elem.movie.title }}</h3>
-                    <h3>{{ new Date(elem.date).toLocaleString('en-UK',{year: 'numeric',month: 'numeric',day: 'numeric',hour: 'numeric',minute: 'numeric'}) }}</h3>
+                    <h3>{{ elem.screening.movie.title }}</h3>
+                    <h3>{{ new Date(elem.screening.date).toLocaleString('en-UK',{year: 'numeric',month: 'numeric',day: 'numeric',hour: 'numeric',minute: 'numeric'}) }}</h3>
                 </div>
             </div>
             <div class="screening-content">
                 <div>
                     <ul>
                         <p>Žanrid: </p>
-                        <li v-for="(genre) in elem.movie.genres" :key="genre"> {{ genre.genre }}</li>
+                        <li v-for="(genre) in elem.screening.movie.genres" :key="genre"> {{ genre.genre }}</li>
                     </ul>                    
                 </div>
-                <img class="movie-poster" src="../../public/generic.png">             
+                <p v-if="elem.score">Filmi IMDB skoor: {{ elem.score }}</p>
+                <img v-if="elem.posterUrl !=null" class="movie-poster" :src="elem.posterUrl" >
+                <img v-else class="movie-poster" src="../../public/generic.png">             
             </div>
         </router-link>
     </div>    
@@ -79,7 +81,7 @@ export default{
             axios.get("http://localhost:8080/api/screenings/user-recomendations",{withCredentials:true})
             .then((res)=>{
                 this.recomendedScreenings= res.data;
-
+                
             }).catch((err)=>{
                 console.log(err);
             })
@@ -95,10 +97,10 @@ export default{
             this.showRecomendations = false;
             this.visibleScreenings = this.upcomingScreenings.filter((item) =>{
                 if(
-                    ( filters.genre == "" || this.genreCheckerUtil(item.movie.genres,filters.genre) ) &&
-                    (filters.language == "" || item.movie.language == filters.language ) &&
-                    (filters.rating == "" || item.movie.rating == filters.rating) &&
-                    (filters.time == "" || this.dateCheckerUtil(item.date,filters.time.split(":")))
+                    ( filters.genre == "" || this.genreCheckerUtil(item.screening.movie.genres,filters.genre) ) &&
+                    (filters.language == "" || item.screening.movie.language == filters.language ) &&
+                    (filters.rating == "" || item.screening.movie.rating == filters.rating) &&
+                    (filters.time == "" || this.dateCheckerUtil(item.screening.date,filters.time.split(":")))
                 ){
                     return true;
                 }
@@ -145,14 +147,15 @@ export default{
             this.upcomingScreenings=res.data.upcoming;
             this.visibleScreenings = res.data.upcoming;
             for(let elem of res.data.upcoming){
-                this.genres.add(elem.movie.genres[0].genre);
-                this.languages.add(elem.movie.language);
-                this.contentRating.add(elem.movie.rating)
+                this.genres.add(elem.screening.movie.genres[0].genre);
+                this.languages.add(elem.screening.movie.language);
+                this.contentRating.add(elem.screening.movie.rating)
             }
+            
         }).catch((err) =>{
             console.log(err);
         })
-        this.getUserRecomendations();
+        if(this.$store.state.isLoggedIn) this.getUserRecomendations();
     }
 }
 </script>

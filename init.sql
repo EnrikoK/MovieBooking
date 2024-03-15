@@ -97,8 +97,8 @@ INSERT INTO genres (genre) VALUES
 
 -- Insert movies
 INSERT INTO movie (description, "language", rating, title) VALUES
-                                                               ('Väike linnuke satub suurde seiklusesse. Ühel päeval avastab väike linnuke, et tema pesa on hävitatud ja ta peab leidma uue kodu. Algab põnev seiklus üle metsade ja mägede.', 'Eesti', 'PG', 'Seiklusrikas Linnuke'),
-                                                               ('Kahe armastava hinge südantlõhestav lugu. Noored armastavad teineteist rohkem kui midagi muud maailmas, kuid saatusel on nende jaoks eriline plaan, mis paneb nende armastuse proovile.', 'Inglise', 'PG13', 'Armastuse Viimane Laul'),
+                                                               ('Väike linnuke satub suurde seiklusesse. Ühel päeval avastab väike linnuke, et tema pesa on hävitatud ja ta peab leidma uue kodu. Algab põnev seiklus üle metsade ja mägede.', 'Eesti', 'PG', 'The Matrix'),
+                                                               ('Kahe armastava hinge südantlõhestav lugu. Noored armastavad teineteist rohkem kui midagi muud maailmas, kuid saatusel on nende jaoks eriline plaan, mis paneb nende armastuse proovile.', 'Inglise', 'PG13', 'Titanic'),
                                                                ('Tulevikumaailmas peavad inimesed võitlema masinate vastu. Aastal 2050 on maailm muutunud tundmatuseni, kus inimesed peavad võitlema ülemaailmse masinate ülevõimu vastu. Üks kangelane astub välja, et lõpetada see hullumeelsus.', 'Inglise', 'R', 'Robovõitlus'),
                                                                ('Kangelane võitleb kurja ülemvõimu vastu. Vapralt Edasi on lugu noorest talupojast, kes peab võitlema pimeduse jõududega, et päästa oma koduküla ja armastatu.', 'Eesti', 'PG13', 'Vapralt Edasi'),
                                                                ('Salapärane mõrv, kus kõik on kahtlusalused. Ühes väikeses külas toimub salapärane mõrv, kus kõik külaelanikud on kahtlusalused. Üks detektiiv peab lahendama selle keerulise juhtumi enne, kui on liiga hilja.', 'Inglise', 'R', 'Mõrv Mustas Öös');

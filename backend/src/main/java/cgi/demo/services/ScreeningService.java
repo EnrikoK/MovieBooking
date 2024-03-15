@@ -1,19 +1,19 @@
 package cgi.demo.services;
 
 import cgi.demo.DTO.*;
-import cgi.demo.entities.Movie;
 import cgi.demo.entities.Screening;
-import cgi.demo.entities.Ticket;
-import cgi.demo.entities.User;
 import cgi.demo.repositories.ScreeningRepository;
 import cgi.demo.repositories.TicketRepository;
 import cgi.demo.repositories.UserRepository;
+import cgi.demo.utils.MovieDetailsAPIRequestUtil;
 import cgi.demo.utils.TicketModelMapper;
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -31,6 +31,9 @@ public class ScreeningService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    MovieDetailsAPIRequestUtil util;
+
     public List<Screening> getAllScreenings(){
         return screeningRepository.findAll();
     }
@@ -40,9 +43,24 @@ public class ScreeningService {
         return screeningRepository.findAllBookedSeatsAtScreening(id);
     }
 
-    public List<Screening> getUpcomingScreenings() {
+    public List<ScreeningDTO> getUpcomingScreenings() throws JSONException, IOException {
         Date date = new Date();
-        return screeningRepository.findUpcomingScreenings(date);
+        List<Screening> s = screeningRepository.findUpcomingScreenings(date);
+        List<ScreeningDTO> response = new ArrayList<>();
+        for(Screening a:s){
+            ScreeningDTO dto = new ScreeningDTO();
+            dto.setScreening(a);
+            try {
+                String[] ratingAndImg = util.getMovieRatingsAndImage(a.getMovie().getTitle());
+                dto.setScore(ratingAndImg[0]);
+                dto.setPosterUrl(ratingAndImg[1]);
+            } catch (Exception e){
+                dto.setPosterUrl(null);
+                dto.setScore(null);
+            }
+            response.add(dto);
+        }
+        return response;
     }
 
     public ScreeningInfoDTO getScreeningInfo(Long id){

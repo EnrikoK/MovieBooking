@@ -3,7 +3,6 @@ package cgi.demo.controllers;
 import cgi.demo.DTO.PurchaseConfirmationDTO;
 import cgi.demo.DTO.PurchaseDTO;
 import cgi.demo.DTO.UserTicketsProjection;
-import cgi.demo.entities.Ticket;
 import cgi.demo.services.TicketsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
