@@ -88,38 +88,48 @@ CREATE TABLE ticket (
 
 -- Insert genres
 INSERT INTO genres (genre) VALUES
-                               ('Komöödia'),
                                ('Draama'),
-                               ('Märul'),
+                               ('Komöödia'),
+                               ('Ulme'),
                                ('Põnevik'),
+                               ('Märul'),
+                               ('Romantika'),
+                               ('Seiklus'),
                                ('Animatsioon'),
-                               ('Romantika');
+                               ('Dokumentaal'),
+                               ('Fantastika');
 
 -- Insert movies
-INSERT INTO movie (description, "language", rating, title) VALUES
-                                                               ('Väike linnuke satub suurde seiklusesse. Ühel päeval avastab väike linnuke, et tema pesa on hävitatud ja ta peab leidma uue kodu. Algab põnev seiklus üle metsade ja mägede.', 'Eesti', 'PG', 'The Matrix'),
-                                                               ('Kahe armastava hinge südantlõhestav lugu. Noored armastavad teineteist rohkem kui midagi muud maailmas, kuid saatusel on nende jaoks eriline plaan, mis paneb nende armastuse proovile.', 'Inglise', 'PG13', 'Titanic'),
-                                                               ('Tulevikumaailmas peavad inimesed võitlema masinate vastu. Aastal 2050 on maailm muutunud tundmatuseni, kus inimesed peavad võitlema ülemaailmse masinate ülevõimu vastu. Üks kangelane astub välja, et lõpetada see hullumeelsus.', 'Inglise', 'R', 'Robovõitlus'),
-                                                               ('Kangelane võitleb kurja ülemvõimu vastu. Vapralt Edasi on lugu noorest talupojast, kes peab võitlema pimeduse jõududega, et päästa oma koduküla ja armastatu.', 'Eesti', 'PG13', 'Vapralt Edasi'),
-                                                               ('Salapärane mõrv, kus kõik on kahtlusalused. Ühes väikeses külas toimub salapärane mõrv, kus kõik külaelanikud on kahtlusalused. Üks detektiiv peab lahendama selle keerulise juhtumi enne, kui on liiga hilja.', 'Inglise', 'R', 'Mõrv Mustas Öös');
-
+INSERT INTO movie (title, description, "language", rating) VALUES
+                                                               ('Forrest Gump', 'Forrest Gump on südamlik lugu lihtsast mehest, kelle südame headus ja siirus puudutab kõiki, kes temaga kohtuvad.', 'Estonian', 'PG13'),
+                                                               ('The Shawshank Redemption', 'Shawshanki lunastus on haarav draama kahest mehest, kelle sõprus ja lootus aitavad neil üle elada ka kõige raskemad ajad.', 'Estonian', 'R'),
+                                                               ('Inception', 'Algus on keeruline ja mõistatuslik seiklus, kus reaalsus ja unenäod põimuvad omavahel ning kõik on võimalik.', 'Estonian', 'PG13'),
+                                                               ('Pulp Fiction', 'Pulp Fiction on tempokas ja omapärane lugu mitmest erinevast tegelasest, kelle teed ristuvad ootamatul moel.', 'Estonian', 'R'),
+                                                               ('The Matrix', 'Matrix on põnev ja visuaalselt muljetavaldav ulmefilm, mis viib vaataja virtuaalsetesse maailmadesse ja identiteedikriisidesse.', 'Estonian', 'R');
 
 
 -- Insert movie_genre relations
+-- Drop existing constraints on movie_genre table
+ALTER TABLE movie_genre DROP CONSTRAINT fk3pdaf1ai9eafeypc7qe401l07;
+ALTER TABLE movie_genre DROP CONSTRAINT fkp6vjabv2e2435at1hnuxg64yv;
+
+-- Populate movie_genre table with associations between movies and genres
 INSERT INTO movie_genre (genre_id, movie_id) VALUES
-                                                (1, 1),
-                                                (6, 1),
-                                                (2, 2),
-                                                (3, 3),
-                                                (4, 3),
-                                                (4, 4),
-                                                (1, 4),
-                                                (5, 5);
+                                                 (1, 1),  -- Forrest Gump (Draama)
+                                                 (2, 2),  -- The Shawshank Redemption (Komöödia)
+                                                 (1, 2),  -- The Shawshank Redemption (Draama)
+                                                 (4, 3),  -- Inception (Põnevik)
+                                                 (10, 3), -- Inception (Fantastika)
+                                                 (4, 4),  -- Pulp Fiction (Põnevik)
+                                                 (5, 4),  -- Pulp Fiction (Märul)
+                                                 (3, 5),  -- The Matrix (Ulme)
+                                                 (5, 5);  -- The Matrix (Märul)
+
 
 -- Insert screenings
 INSERT INTO screening ("date", movie_id) VALUES
-                                             ('2024-06-15 18:00:00', 1),
-                                             ('2024-06-16 20:00:00', 2),
-                                             ('2024-06-17 19:30:00', 3),
-                                             ('2024-06-18 21:00:00', 4),
-                                             ('2024-06-19 17:45:00', 5);
+                                             ('2024-06-20 18:00:00', 1),
+                                             ('2024-06-21 19:30:00', 2),
+                                             ('2024-06-22 20:00:00', 3),
+                                             ('2024-06-23 17:45:00', 4),
+                                             ('2024-06-24 21:15:00', 5);

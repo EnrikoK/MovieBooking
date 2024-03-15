@@ -1,5 +1,6 @@
 package cgi.demo.services;
 
+import cgi.demo.DTO.ScreeningDTO;
 import cgi.demo.DTO.UserFavoriteGenresProjection;
 import cgi.demo.entities.Screening;
 import cgi.demo.entities.User;
@@ -7,10 +8,12 @@ import cgi.demo.repositories.MovieRepository;
 import cgi.demo.repositories.ScreeningRepository;
 import cgi.demo.repositories.TicketRepository;
 import cgi.demo.repositories.UserRepository;
+import cgi.demo.utils.MovieDetailsAPIRequestUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -29,20 +32,37 @@ public class RecomendationsService {
     @Autowired
     UserRepository userRepository;
 
-    public List<Screening> getRecomendations(String user) {
+    @Autowired
+    MovieDetailsAPIRequestUtil util;
+
+    public List<ScreeningDTO> getRecomendations(String user) {
 
         User userInfo = userRepository.findByUsername(user);
+        //Ordered list of genres by genre ticket count
         List<UserFavoriteGenresProjection> favorites = userRepository.findUserFavoriteGenres(userInfo.getId());
-        //favorites.sort(Comparator.comparing(UserFavoriteGenresProjection::getCount));
 
-        List<Screening> allScreenings = new ArrayList<>();
+        HashSet<Screening> addedScreenings = new HashSet<>();
+        List<ScreeningDTO> allScreenings = new ArrayList<>();
         for (UserFavoriteGenresProjection projection:favorites) {
-            System.out.println(projection);
+
             List<Screening> genreScreenings = screeningRepository.findUpcomingScreeningByGenreId(projection.getId());
-            allScreenings.addAll(genreScreenings);
+            for (Screening s: genreScreenings) {
+                if(addedScreenings.contains(s)) continue;
+                else addedScreenings.add(s);
+                ScreeningDTO dto = new ScreeningDTO();
+                dto.setScreening(s);
+                try {
+                    String[] ratingAndImg = util.getMovieRatingsAndImage(s.getMovie().getTitle());
+                    dto.setScore(ratingAndImg[0]);
+                    dto.setPosterUrl(ratingAndImg[1]);
+                } catch (Exception e){
+                    dto.setPosterUrl(null);
+                    dto.setScore(null);
+                }
+                allScreenings.add(dto);
+            }
 
         }
-
         return allScreenings;
     }
 }
