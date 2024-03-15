@@ -1,6 +1,6 @@
-#Filmide broneerimise süsteemi testtöö CGI suvepraktika jaoks
+# Filmide broneerimise süsteemi testtöö CGI suvepraktika jaoks
 
-##Backend
+## Backend
 
 Rakenduse backend on tehtud Spring Boot raamistikus, kasutades Java 21 versiooni. Backend jookseb pordil 8080 ja on ühendatud PostgreSQL serveriga mis jookseb pordil 5432.
 Kasutajate registreerimiseks ja autentimiseks kasutasin JWT HttpOnly tokeneid. Rakendusel on 3 põhilist API route'i.
@@ -9,9 +9,9 @@ localhost:8080/api/screenings/
 localhost:8080/api/auth/
 localhost:8080/api/tickets/
 ```
-API Endpointid:
+### API Endpointid:
 
-###/api/screenings/
+### /api/screenings/
 
 
 Tagastab kõik kinokavas olevad filmide linastused
@@ -36,7 +36,7 @@ vastaval antud žanrile ostetud piletite arvu põhjal.
 
 [GET] /api/user-recomendations
 
-###/api/auth
+### /api/auth
 
 Kasutajaks registreerimise endpoint
 
@@ -73,7 +73,7 @@ kehtivusaeg on 0.
 [GET] /api/auth/logout
 
 
-###/api/tickets
+### /api/tickets
 
 Leitakse JWT põhjal kasutaja ja tagastatakse temale kuuluvad piletid.
 
@@ -94,12 +94,12 @@ JSON payload: screeningID - vastava filmiseansi id, seats - int[][] kus iga iste
 
 ```
 
-#Frontend
+## Frontend
 
 Rakenduse frontendi jaoks on kasutatud raamistiku Vue3 koos Vuex ja Vue-Routeriga. Frontend jookseb pordil 3333
 
 
-#Docker
+## Docker
 
 Lisasin projektile ka failid, et seda saaks Dockeri konteinerites jooksutada. Kuna ma kasutasin Dockerit selle projekti raames esimest korda, siis loodan, et mu dockerFile-id ikka töötavad.
 Kui kõik töötab nagu mu lokaalses masinas siis peaks saama rakendust käivitada dockeris: liigu rakenduse juurkausta ja käivita
