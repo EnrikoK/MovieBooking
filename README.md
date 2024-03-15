@@ -106,7 +106,7 @@ docker-compose up --buid
 ## Mis jäi tegemata / mida sooviks veel teha
 Kuna ülikoolis õppetöö kõrvalt ei ole aeg piiramatu ressurss, siis tooksin välja mingid programmi osad, mille edasi nokitsemiseks mul hetkel aega ei jätkund:
 
-1) Backendis MovieDetailsAPIRequestUtil klass teeb päringuid iga seansi ja filmi kohta uuest. Mõtekas oleks implementeerida mingit cache'i, kus hoida juba leitud filmide reitinguid ja postri url-i. Muidu koormab see lihtsalt välist API-t ja teeb filmiseanside tagastamise aeglaseks, kui sama filmi puhul on rohkem seansse.
+1) Backendis MovieDetailsAPIRequestUtil klass teeb päringuid välise API pihta iga seansi ja filmi kohta uuest. Mõtekas oleks implementeerida mingit cache'i, kus hoida juba leitud filmide reitinguid ja postri url-i. Muidu koormab see lihtsalt välist API-t ja teeb filmiseanside tagastamise aeglaseks, kui sama filmi puhul on rohkem seansse.
 2) Frontendis välja logimise funktsiooni puhul võib tekkida olukord, kus kui kuvatakse kasutaja profiili ja pileteid ning logitakse välja, siis lehe headeri seis ei muutu vastavalt või kui headeri seis muutub, siis ei toimu kasutaja uuele url-ile suunamine õigesti. Ilmselt on seal mingi probleem kasutaja sisselogitud oleku määramisel Vuex store'is.
 3) Tegemata jäid ajanappuse tõttu ka Backend ja Frontend testid.
 4) Frontend disain on võrdlemisi primitiivne. Otsustasin panna põhirõhu API funktsionaalsuse alla ja CSS-ga tegelemiseks nii palju aega ei jäänud.
