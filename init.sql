@@ -101,11 +101,11 @@ INSERT INTO genres (genre) VALUES
 
 -- Insert movies
 INSERT INTO movie (title, description, "language", rating) VALUES
-                                                               ('Forrest Gump', 'Forrest Gump on südamlik lugu lihtsast mehest, kelle südame headus ja siirus puudutab kõiki, kes temaga kohtuvad.', 'Estonian', 'PG13'),
-                                                               ('The Shawshank Redemption', 'Shawshanki lunastus on haarav draama kahest mehest, kelle sõprus ja lootus aitavad neil üle elada ka kõige raskemad ajad.', 'Estonian', 'R'),
-                                                               ('Inception', 'Algus on keeruline ja mõistatuslik seiklus, kus reaalsus ja unenäod põimuvad omavahel ning kõik on võimalik.', 'Estonian', 'PG13'),
-                                                               ('Pulp Fiction', 'Pulp Fiction on tempokas ja omapärane lugu mitmest erinevast tegelasest, kelle teed ristuvad ootamatul moel.', 'Estonian', 'R'),
-                                                               ('The Matrix', 'Matrix on põnev ja visuaalselt muljetavaldav ulmefilm, mis viib vaataja virtuaalsetesse maailmadesse ja identiteedikriisidesse.', 'Estonian', 'R');
+                                                               ('Forrest Gump', 'Forrest Gump on südamlik lugu lihtsast mehest, kelle südame headus ja siirus puudutab kõiki, kes temaga kohtuvad.', 'Eesti', 'PG13'),
+                                                               ('The Shawshank Redemption', 'Shawshanki lunastus on haarav draama kahest mehest, kelle sõprus ja lootus aitavad neil üle elada ka kõige raskemad ajad.', 'Eesti', 'R'),
+                                                               ('Inception', 'Algus on keeruline ja mõistatuslik seiklus, kus reaalsus ja unenäod põimuvad omavahel ning kõik on võimalik.', 'Eesti', 'PG13'),
+                                                               ('Pulp Fiction', 'Pulp Fiction on tempokas ja omapärane lugu mitmest erinevast tegelasest, kelle teed ristuvad ootamatul moel.', 'Inglise', 'R'),
+                                                               ('The Matrix', 'Matrix on põnev ja visuaalselt muljetavaldav ulmefilm, mis viib vaataja virtuaalsetesse maailmadesse ja identiteedikriisidesse.', 'Eesti', 'R');
 
 
 -- Insert movie_genre relations
