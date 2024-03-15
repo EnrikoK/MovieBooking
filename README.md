@@ -1,6 +1,6 @@
 # Filmidele piletite broneerimise süsteemi testtöö CGI suvepraktika jaoks
 
-Veebirakendus, kus saab registreerida end kasutajaks, logida kasutajana sise ja siis broneerida valitud filmiseanssidele istekohti. Samuti saab profiili alt kuvada kasutaja ostetud pileteid.
+Veebirakendus, kus saab registreerida end kasutajaks, logida kasutajana sise ja siis broneerida valitud filmiseanssidele istekohti. Samuti saab profiili alt kuvada kasutaja ostetud pileteid. Rakendus soovitab kasutajale seansi vaates istekohad ja kui kasutajal on tekkinud filmide broneerimise ajalugu, siis soovitatakse talle vastava žanriga filme.
 
 
 
@@ -110,6 +110,16 @@ Kuna ülikoolis õppetöö kõrvalt ei ole aeg piiramatu ressurss, siis tooksin 
 2) Frontendis välja logimise funktsiooni puhul võib tekkida olukord, kus kui kuvatakse kasutaja profiili ja pileteid ning logitakse välja, siis lehe headeri seis ei muutu vastavalt või kui headeri seis muutub, siis ei toimu kasutaja uuele url-ile suunamine õigesti. Ilmselt on seal mingi probleem kasutaja sisselogitud oleku määramisel Vuex store'is.
 3) Tegemata jäid ajanappuse tõttu ka Backend ja Frontend testid.
 4) Frontend disain on võrdlemisi primitiivne. Otsustasin panna põhirõhu API funktsionaalsuse alla ja CSS-ga tegelemiseks nii palju aega ei jäänud.
+5) Andmebaasi reeglid tahaksid võib-olla üle vaatamist ja osadele tulpadele tuleks lisada vajalikud piirangud.
+6) Kasutajatele filmide soovitamisel peaks backendis tegema natukene muudatusi, et soovitused oleks ajaliselt korrektses järjekorras.
+
+## Millist välist abi kasutasin ja kus
+- andmed, mida andmebaasi selle loomisel init.db skriptiga sisestatakse on genereeritud ChatGPT abil. Kuna tegemist on testimiseks mõeldud anmebaasi seisuga, siis vast sellega suur probleemi ei ole.
+- Spring Security on minu jaoks veel veidi uus ja selle puhul kasutasin erinevaid allikaid. Vaatasin mingeid teisi reposid ja nende implementatsioone, lugesin internetist ja kasutasin ChatGPT abi. Ühtegi konkreetset allikat siin välja ei oskagi tuua, sest osteselt ei kopeerinud koodi, vaid üritasin rohkem sellest loogikast aru saada ja enda implementatsiooni rakendada httpOnly küpsistega.
+
+
+
+
 
 
 
